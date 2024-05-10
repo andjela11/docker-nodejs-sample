@@ -23,7 +23,7 @@ CMD ["npm", "run", "dev"]
 
 
 
-FROM base AS prod
+FROM node:20.11-alpine AS prod
 
 WORKDIR /usr/docker-nodejs-sample
 
@@ -31,7 +31,7 @@ COPY package*.json ./
 
 RUN npm ci --only=production
 
-COPY --from=dev /usr/docker-nodejs-sample/src ./src
+COPY --from=base /usr/docker-nodejs-sample/src ./src
 
 EXPOSE 3000
 
