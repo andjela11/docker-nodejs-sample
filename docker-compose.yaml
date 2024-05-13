@@ -16,7 +16,7 @@ services:
             - node-app
     node-app:
         build: ./
-        image: node-app:1.0
+        image: ghcr.io/andjela11/docker-nodejs-sample:v1.2.3
         container_name: node-app
         environment:
             POSTGRES_USER: ${POSTGRES_USER}
