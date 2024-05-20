@@ -1,6 +1,5 @@
-variable "Owner" {
-    type = string
-    default = "Andjela Jovanovic"
+variable "owner_tag" {
+    description = "owner tag"
 }
 
 variable "github_profile" {
@@ -15,4 +14,12 @@ variable "github_repo" {
   default = {
     "todo-app-repo" = "docker-nodejs-sample"
   }
+}
+
+variable "aws_region" {
+  description = "AWS region"
+}
+
+variable "app_name" {
+  description = "app name"
 }
