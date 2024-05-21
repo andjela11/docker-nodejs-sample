@@ -4,6 +4,20 @@ variable "profile" {
   default = "Vega-AndjelaJ"
 }
 
+variable "github_profile" {
+  description = "Name for GitHub profile"
+  type = string
+  default = "andjela11"
+}
+
+variable "github_repo" {
+  description = "Name for GitHub repo"
+  type = map(string)
+  default = {
+    "todo-app-repo" = "docker-nodejs-sample"
+  }
+}
+
 variable "region" {
   description = "AWS region"
   type = string
@@ -18,4 +32,12 @@ variable "owner" {
 variable "name" {
   type = string
   default = "to-do-app"
+}
+variable "app_name" {
+  description = "app name"
+}
+
+variable "vpc_cidr_block" {
+  type = string
+  default = "172.17.0.0/16"
 }

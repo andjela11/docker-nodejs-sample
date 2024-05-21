@@ -24,6 +24,6 @@ module "ecr" {
 
   tags = {
     Terraform   = "true"
-    Owner = var.owner_tag
+    Owner = var.owner
   }
 }

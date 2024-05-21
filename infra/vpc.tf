@@ -60,7 +60,7 @@ module "vpc" {
 
   tags = {
     Terraform = "true"
-    Owner = var.Owner
+    Owner = var.owner
   }
 }
 
