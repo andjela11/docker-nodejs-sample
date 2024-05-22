@@ -52,9 +52,7 @@ module "iam_policy" {
         "eks:DescribeCluster",
         "eks:DescribeNodegroup",
         "eks:ListClusters",
-        "eks:ListNodegroups",
-        "ec2:DescribeInstances",
-        "ec2:DescribeNetworkInterfaces"
+        "eks:ListNodegroups"
       ],
       "Effect": "Allow",
       "Resource": "${module.ecr.repository_arn}"
