@@ -33,9 +33,6 @@ variable "name" {
   type = string
   default = "to-do-app"
 }
-variable "app_name" {
-  description = "app name"
-}
 
 variable "vpc_cidr_block" {
   type = string
