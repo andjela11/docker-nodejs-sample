@@ -44,11 +44,17 @@ module "iam_policy" {
     {
       "Action": [
         "ecr:CompleteLayerUpload",
-              "ecr:GetAuthorizationToken",
-              "ecr:UploadLayerPart",
-              "ecr:InitiateLayerUpload",
-              "ecr:BatchCheckLayerAvailability",
-              "ecr:PutImage"
+        "ecr:GetAuthorizationToken",
+        "ecr:UploadLayerPart",
+        "ecr:InitiateLayerUpload",
+        "ecr:BatchCheckLayerAvailability",
+        "ecr:PutImage",
+        "eks:DescribeCluster",
+        "eks:DescribeNodegroup",
+        "eks:ListClusters",
+        "eks:ListNodegroups",
+        "ec2:DescribeInstances",
+        "ec2:DescribeNetworkInterfaces"
       ],
       "Effect": "Allow",
       "Resource": "${module.ecr.repository_arn}"
@@ -57,4 +63,3 @@ module "iam_policy" {
 }
 EOF
 }
-
