@@ -43,3 +43,13 @@ variable "lambda_domain_name" {
   type = string
   default = "lambda.devops.sitesstage.com"
 }
+
+variable "k8s_namespace" {
+  type = string
+  default = "k8s-alb-ns"
+}
+
+variable "service_account_name" {
+  type = string
+  default = "sa-alb-contr"
+}
