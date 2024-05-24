@@ -43,3 +43,4 @@ variable "lambda_domain_name" {
   type = string
   default = "lambda.devops.sitesstage.com"
 }
+
