@@ -39,7 +39,7 @@ resource "helm_release" "alb_controler" {
   }
   set {
     name = "serviceAccount.name"
-    value = var.service_account_name
+    value = "sa-alb-contr"
   }
   set {
     name = "serviceAccount.annotations.eks\\.amazonaws\\.com/role-arn"

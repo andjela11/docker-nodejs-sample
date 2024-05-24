@@ -48,8 +48,3 @@ variable "k8s_namespace" {
   type = string
   default = "k8s-alb-ns"
 }
-
-variable "service_account_name" {
-  type = string
-  default = "sa-alb-contr"
-}
