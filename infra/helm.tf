@@ -45,8 +45,4 @@ resource "helm_release" "alb_controler" {
     name = "serviceAccount.annotations.eks\\.amazonaws\\.com/role-arn"
     value = module.iam_eks_role.iam_role_arn
   }
-   set {
-   name = "loadBalancerClass"
-   value = "service.k8s.aws/alb"
- }
 }
