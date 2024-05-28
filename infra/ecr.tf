@@ -27,3 +27,7 @@ module "ecr" {
     Owner = var.owner
   }
 }
+
+data "aws_ecr_authorization_token" "token" {
+  
+}

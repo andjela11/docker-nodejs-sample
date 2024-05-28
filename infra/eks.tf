@@ -41,3 +41,21 @@ module "eks" {
     Owner = var.owner
   }
 }
+
+resource "kubernetes_storage_class" "storage_class" {
+  metadata {
+    name = "storage-class-postgre"
+  }
+  depends_on = [ module.eks ]
+
+  storage_provisioner = "ebs.csi.aws.com"
+  volume_binding_mode = "WaitForFirstConsumer"
+  allow_volume_expansion = true
+  parameters = {
+    "encrypted" = "true"
+  }
+}
+
+data "aws_eks_cluster_auth" "cluster_auth" {
+  name =  module.eks.cluster_name
+}
