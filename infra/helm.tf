@@ -45,17 +45,17 @@ resource "helm_release" "postgresql" {
 
   set {
     name = "auth.username"
-    value = jsondecode(data.aws_secretsmanager_secret_version.current.secret_string)["db-username"]
+    value = lookup(jsondecode(sensitive(data.aws_secretsmanager_secret_version.current.secret_string)), "db-username", "what?")
    }
 
    set {
     name = "auth.password"
-    value = jsondecode(data.aws_secretsmanager_secret_version.current.secret_string)["db-password"]
+    value = lookup(jsondecode(sensitive(data.aws_secretsmanager_secret_version.current.secret_string)), "db-password", "what?")
    }
   
    set {
     name = "auth.database"
-    value = jsondecode(data.aws_secretsmanager_secret_version.current.secret_string)["db-name"]
+    value = lookup(jsondecode(sensitive(data.aws_secretsmanager_secret_version.current.secret_string)), "db-name", "what?")
    }
    set {
     name = "primary.persistence.volumeName"

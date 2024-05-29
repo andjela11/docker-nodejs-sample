@@ -15,6 +15,14 @@ module "eks" {
   vpc_id    =  module.vpc.vpc_id
   subnet_ids  = module.vpc.private_subnets
 
+  cluster_addons = {
+    aws-ebs-csi-driver = {
+      service_account_role_arn = module.ebs_csi_irsa_role.iam_role_arn
+      addon_version = "v1.30.0-eksbuild.1"
+      resolve_conflicts = "PRESERVE"
+    }
+  }
+
   # EKS Managed Node Group(s)
   eks_managed_node_groups = {
     node-group-andjela = {
