@@ -69,7 +69,7 @@ module "ebs_csi_irsa_role" {
   attach_ebs_csi_policy = true
 
   oidc_providers = {
-    ex = {
+    main = {
       provider_arn               = module.eks.oidc_provider_arn
       namespace_service_accounts = ["kube-system:ebs-csi-controller-sa"]
     }
