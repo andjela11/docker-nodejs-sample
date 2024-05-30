@@ -1,14 +1,3 @@
-provider "helm" {
-  kubernetes {
-    host = module.eks.cluster_endpoint
-    cluster_ca_certificate = base64decode(module.eks.cluster_certificate_authority_data)
-    exec {
-      api_version = "client.authentication.k8s.io/v1beta1"
-      args        = ["eks", "get-token", "--cluster-name", module.eks.cluster_name]
-      command     = "aws"
-    }
-  }
-}
 resource "helm_release" "alb_controler" {
   name = "load-balancer-controller"
   repository = "https://aws.github.io/eks-charts"
@@ -44,5 +33,44 @@ resource "helm_release" "alb_controler" {
   set {
     name = "serviceAccount.annotations.eks\\.amazonaws\\.com/role-arn"
     value = module.iam_eks_role.iam_role_arn
+  }
+}
+
+resource "helm_release" "postgresql" {
+  name       = "mypostgresql"
+  repository = "https://charts.bitnami.com/bitnami"
+  chart      = "postgresql"
+  namespace  = "vegait-training"
+  create_namespace = true
+
+  set {
+    name = "auth.username"
+    value = lookup(jsondecode(sensitive(data.aws_secretsmanager_secret_version.current.secret_string)), "db-username", "what?")
+   }
+
+   set {
+    name = "auth.password"
+    value = lookup(jsondecode(sensitive(data.aws_secretsmanager_secret_version.current.secret_string)), "db-password", "what?")
+   }
+  
+   set {
+    name = "auth.database"
+    value = lookup(jsondecode(sensitive(data.aws_secretsmanager_secret_version.current.secret_string)), "db-name", "what?")
+   }
+   set {
+    name = "primary.persistence.volumeName"
+    value = "pvc-postgre-todoapp"
+   }
+   set {
+    name = "primary.persistence.size"
+    value = "8Gi"
+   }
+   set {
+     name = "primary.persistence.storageClass"
+     value = kubernetes_storage_class.storage_class.metadata[0].name
+   }
+   set {
+    name  = "serviceAccount.create"
+    value = false
   }
 }

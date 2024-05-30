@@ -15,6 +15,14 @@ module "eks" {
   vpc_id    =  module.vpc.vpc_id
   subnet_ids  = module.vpc.private_subnets
 
+  cluster_addons = {
+    aws-ebs-csi-driver = {
+      service_account_role_arn = module.ebs_csi_irsa_role.iam_role_arn
+      addon_version = "v1.30.0-eksbuild.1"
+      resolve_conflicts = "PRESERVE"
+    }
+  }
+
   # EKS Managed Node Group(s)
   eks_managed_node_groups = {
     node-group-andjela = {
@@ -40,4 +48,22 @@ module "eks" {
     Terraform   = "true"
     Owner = var.owner
   }
+}
+
+resource "kubernetes_storage_class" "storage_class" {
+  metadata {
+    name = "storage-class-postgre"
+  }
+  depends_on = [ module.eks ]
+
+  storage_provisioner = "ebs.csi.aws.com"
+  volume_binding_mode = "WaitForFirstConsumer"
+  allow_volume_expansion = true
+  parameters = {
+    "encrypted" = "true"
+  }
+}
+
+data "aws_eks_cluster_auth" "cluster_auth" {
+  name =  module.eks.cluster_name
 }
