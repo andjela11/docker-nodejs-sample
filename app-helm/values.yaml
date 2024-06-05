@@ -2,7 +2,7 @@
 # remove values
 app:
   name:
-  label: todoapp
+  label: 
   port: 
   replicas:
 
