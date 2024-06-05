@@ -74,3 +74,72 @@ resource "helm_release" "postgresql" {
     value = false
   }
 }
+
+resource "helm_release" "todoapp" {
+  name       = "todo-app"
+  repository = join("", ["oci://", module.ecr.repository_url])
+  chart      = "todoapp"
+  namespace  = "vegait-training"
+  create_namespace = true
+
+  set {
+    name = "app.name"
+    value = "todo-app"
+  }
+    set {
+    name = "app.label"
+    value = "todo-app"
+  }
+  set {
+    name = "app.port"
+    value = 3000
+  }
+  set {
+    name = "app.replicas"
+    value = 1
+  }
+  set {
+    name = "container.image"
+    value = module.ecr.repository_url
+  }
+  set {
+    name = "container.tag"
+    value = "v1.2.3"
+  }
+  set {
+    name = "service.port"
+    value = 443
+  }
+  set {
+    name = "service.targetPort"
+    value = 3000
+  }
+  set {
+    name = "service.protocol"
+    value = "TCP"
+  }
+  set {
+    name = "ingress.host"
+    value = "andjela-jovanovic.lambda.devops.sitesstage.com"
+  }
+  set {
+    name = "ingress.class"
+    value = "alb"
+  }
+  set {
+    name = "secret.dbuser"
+    value = lookup(jsondecode(sensitive(data.aws_secretsmanager_secret_version.current.secret_string)), "db-username", "what?")
+  }
+  set {
+    name = "secret.dbpassword"
+    value = lookup(jsondecode(sensitive(data.aws_secretsmanager_secret_version.current.secret_string)), "db-password", "what?")
+  }
+  set {
+    name = "secret.dbname"
+    value = lookup(jsondecode(sensitive(data.aws_secretsmanager_secret_version.current.secret_string)), "db-name", "what?")
+  }
+  set {
+    name = "config.host"
+    value = "mypostgresql"
+  }
+}

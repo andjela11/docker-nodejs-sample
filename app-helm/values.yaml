@@ -1,0 +1,29 @@
+
+# remove values
+app:
+  name:
+  label: todoapp
+  port: 
+  replicas:
+
+  container:
+    image:
+    tag:
+
+service:
+  type: ClusterIP
+  port: 
+  target_port: 
+  protocol: 
+
+ingress:
+  host:
+  class:
+
+secret:
+  dbuser:
+  dbpassword:
+  dbname:
+
+config:
+  host:
