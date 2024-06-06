@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-deployment
+spec:
+  replicas: {{.Values.app.replicas}}
+  selector: 
+  matchLabels:
+    app: {{.Values.app.label}}
+  template:
+    metadata:
+      labels:
+        app: {{.Values.app.label}}
+    spec:
+      containers:
+      - name: {{.Release.Name}}
+        image: "{{ .Values.container.image }}:{{ .Values.container.tag }}"
+        ports:
+        - containerPort: {{.Values.app.port}}
+        envFrom:
+        - configMapRef: 
+          name: {{.Release.Name}}-configmap
+        - secretRef: 
+          name: {{.Release.Name}}-secret
+        

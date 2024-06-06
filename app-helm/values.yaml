@@ -1,0 +1,28 @@
+
+# remove values
+app:
+  name:
+  label: 
+  port: 
+  replicas:
+
+  container:
+    image:
+    tag:
+
+service:
+  port: 
+  target_port: 
+  protocol: 
+
+ingress:
+  host:
+  class:
+
+secret:
+  dbuser:
+  dbpassword:
+  dbname:
+
+config:
+  host:
