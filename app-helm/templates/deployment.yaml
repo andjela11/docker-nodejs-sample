@@ -3,23 +3,25 @@ kind: Deployment
 metadata:
   name: {{ .Release.Name }}-deployment
 spec:
-  replicas: {{.Values.app.replicas}}
+  replicas: {{ .Values.app.replicas }}
   selector: 
-  matchLabels:
-    app: {{.Values.app.label}}
+    matchLabels:
+      app: {{ .Values.app.label }}
   template:
     metadata:
       labels:
-        app: {{.Values.app.label}}
+        app: {{ .Values.app.label }}
     spec:
       containers:
-      - name: {{.Release.Name}}
+      - name: {{ .Release.Name }}
         image: "{{ .Values.container.image }}:{{ .Values.container.tag }}"
         ports:
-        - containerPort: {{.Values.app.port}}
+        - containerPort: {{ .Values.app.port }}
         envFrom:
         - configMapRef: 
-          name: {{.Release.Name}}-configmap
+            name: {{ .Release.Name }}-configmap
         - secretRef: 
-          name: {{.Release.Name}}-secret
+            name: {{ .Release.Name }}-secret
+      imagePullSecrets: 
+        - name: regcred
         

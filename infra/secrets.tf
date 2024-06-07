@@ -1,7 +1,7 @@
 module "secrets_manager" {
   source = "terraform-aws-modules/secrets-manager/aws"
   description = "secrets for db"
-  name = "postgres-credentials-andjela"
+  name = "credentials-postgres-andjela"
 
   ignore_secret_changes = true
   secret_string = jsonencode({
