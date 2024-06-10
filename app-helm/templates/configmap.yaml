@@ -3,6 +3,6 @@ kind: ConfigMap
 metadata:
   name: {{.Release.Name}}-configmap
   labels:
-    app: {{.Values.app.label}}
-  data:
-    POSTGRES_HOST : {{.Values.config.host}}
+    app: {{ .Values.app.label }}
+data:
+  POSTGRES_HOST : {{ .Values.config.host }}

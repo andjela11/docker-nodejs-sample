@@ -4,7 +4,7 @@ metadata:
   name: {{ .Release.Name }}-ingress
   annotations:
     alb.ingress.kubernetes.io/scheme: internet-facing
-    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}], [{"HTTPS": 443}]'
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
     alb.ingress.kubernetes.io/ssl-redirect: '443'
     alb.ingress.kubernetes.io/target-type: ip
     alb.ingress.kubernetes.io/inbound-cidrs: "80.93.252.50/32"
@@ -21,3 +21,6 @@ spec:
               name: {{.Release.Name }}-service
               port:
                 number: {{ .Values.service.port }}
+  tls:
+    - hosts:
+      - {{ .Values.ingress.host }}

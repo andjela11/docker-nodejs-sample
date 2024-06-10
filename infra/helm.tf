@@ -19,6 +19,10 @@ resource "helm_release" "alb_controler" {
     value = module.vpc.vpc_id
   }
   set {
+    name = "defaultTargetType"
+    value = "ip"
+  }
+  set {
     name = "replicaCount"
     value = 1
   }
@@ -77,10 +81,10 @@ resource "helm_release" "postgresql" {
 
 resource "helm_release" "todoapp" {
   name       = "todo-app"
-  repository = join("", ["oci://", module.ecr.repository_url])
-  chart      = "todoapp"
+  chart      = "${var.name}-repo"
   namespace  = "vegait-training"
-  create_namespace = true
+  repository = join("", ["oci://", module.ecr.repository_registry_id, ".dkr.ecr.", var.region, ".amazonaws.com"])
+  version = "0.1.2"
 
   set {
     name = "app.name"
@@ -100,11 +104,11 @@ resource "helm_release" "todoapp" {
   }
   set {
     name = "container.image"
-    value = module.ecr.repository_url
+    value = "ghcr.io/andjela11/docker-nodejs-sample"
   }
   set {
     name = "container.tag"
-    value = "v1.2.3"
+    value = "v1.2.4"
   }
   set {
     name = "service.port"
@@ -140,6 +144,6 @@ resource "helm_release" "todoapp" {
   }
   set {
     name = "config.host"
-    value = "mypostgresql"
+    value = "mypostgresql-hl"
   }
 }
