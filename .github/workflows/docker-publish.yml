@@ -7,6 +7,13 @@ name: Docker
 
 on:
   workflow_dispatch:
+    inputs:
+        tag:
+            description: 'Semantic version'
+            required: true
+            type: string
+    push:
+        tags: ['v[0-9]+.[0-9]+.[0-9]+']
   # push:
   #   branches:
   #   - main
@@ -15,10 +22,11 @@ on:
 
 env:
   # Use docker.io for Docker Hub if empty
-  REGISTRY: 211125517344.dkr.ecr.eu-central-1.amazonaws.com #ghcr.io
+  REPOSITORY: todo-app-repo #ghcr.io
   # github.repository as <account>/<repo>
   IMAGE_NAME: ${{ github.repository }}
-  ASSUMABLE_ROLE: arn:aws:iam::211125517344:role/role-with-oidc-todo
+  IMAGE_TAG: ${{ inputs.tag || (github.event_name == 'push' && github.ref_name)}}
+  ASSUMABLE_ROLE: ${{ secrets.assumable_role }}
   AWS_REGION: eu-central-1
 
 jobs:
@@ -44,50 +52,20 @@ jobs:
         with:
           role-to-assume: ${{env.ASSUMABLE_ROLE}}
           aws-region: ${{env.AWS_REGION}} 
+          mask-aws-account-id: 'true'
 
 
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
-
-      # Extract metadata (tags, labels) for Docker
-      # https://github.com/docker/metadata-action
-      - name: Extract Docker metadata
-        id: meta
-        uses: docker/metadata-action@96383f45573cb7f253c731d3b3ab81c87ef81934 # v5.0.0
         with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-          tags: |
-            type=ref,event=tag  
+          mask-password: 'true'
 
-      - name: Build, tag, and push docker image to Amazon ECR
-        env:
-          REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          REPOSITORY: to-do-app-repo
-          IMAGE_TAG: ${{ steps.meta.outputs.tags }}
-        run: |
-          docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG .
-          docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
+      - name: Build and push Docker image
+          uses: docker/build-push-action@f2a1d5e99d037542a71f64918e516c093c6f3fc4
+            with:
+              context: .
+                push: true
+                tags: ${{ steps.login-ecr.outputs.registry}}/${{ env.REPOSITORY }}:docker-${{env.IMAGE_TAG}}
 
-      # Login against a Docker registry except on PR
-      # https://github.com/docker/login-action
-      # - name: Log into registry ${{ env.REGISTRY }}
-      #   #if: github.event_name != 'pull_request'
-      #   uses: aws-actions/amazon-ecr-login@v2 # docker/login-action@343f7c4344506bcbf9b4de18042ae17996df046d # v3.0.0
-      #   with:
-      #     registry: ${{ env.REGISTRY }}
-      #     username: ${{ github.actor }}
-      #     password: ${{ secrets.devopsToken }}
 
-      
-
-      # Build and push Docker image with Buildx (don't push on PR)
-      # https://github.com/docker/build-push-action
-      # - name: Build and push Docker image
-      #   id: build-and-push
-      #   uses: docker/build-push-action@0565240e2d4ab88bba5387d719585280857ece09 # v5.0.0
-      #   with:
-      #     context: .
-      #     push: true 
-      #     tags: ${{ steps.meta.outputs.tags }}
-      #     labels: ${{ steps.meta.outputs.labels }}

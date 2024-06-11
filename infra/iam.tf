@@ -55,7 +55,7 @@ module "iam_policy" {
         "eks:ListNodegroups"
       ],
       "Effect": "Allow",
-      "Resource": "${module.ecr.repository_arn}"
+      "Resource": "*"
     }
   ]
 }
