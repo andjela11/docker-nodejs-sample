@@ -16,7 +16,7 @@ on:
 
 env:
   # Use docker.io for Docker Hub if empty
-  REPOSITORY: todo-app-repo #ghcr.io
+  REPOSITORY: to-do-app-repo #ghcr.io
   # github.repository as <account>/<repo>
   IMAGE_NAME: ${{ github.repository }}
   ASSUMABLE_ROLE: ${{ secrets.assumable_role }}
