@@ -1,14 +1,13 @@
 
-# remove values
 app:
-  name:
+  name: 
   label: 
   port: 
-  replicas:
+  replicas: 
 
-  container:
-    image:
-    tag:
+container:
+  image: 
+  tag: 
 
 service:
   port: 
@@ -16,13 +15,13 @@ service:
   protocol: 
 
 ingress:
-  host:
-  class:
+  host: 
+  class: 
 
 secret:
-  dbuser:
-  dbpassword:
-  dbname:
+  dbuser: 
+  dbpassword: 
+  dbname: 
 
-config:
-  host:
+config: 
+  host: 
