@@ -29,8 +29,21 @@ resource "aws_route53_record" "to-do-app" {
   }
 }
 
+data "kubernetes_ingress_v1" "chart" {
+  metadata {
+    name = "todo-app-ingress"
+    namespace = "vegait-training"
+  }
+}
 
 data "aws_lb" "alb" {
   depends_on = [helm_release.todoapp]
-  name = "k8s-vegaittr-todoappi-1ddf919bf1"
+  name = local.lb_name[0]
 }
+
+locals {
+  dns_part_name = split(".", data.kubernetes_ingress_v1.chart.status.0.load_balancer.0.ingress.0.hostname)[0]
+  lb_name = regex("^(.*?)-[0-9]+$", local.dns_part_name)
+}
+
+
