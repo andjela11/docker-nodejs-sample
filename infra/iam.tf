@@ -44,7 +44,6 @@ module "iam_policy" {
     {
       "Action": [
         "ecr:CompleteLayerUpload",
-        "ecr:GetAuthorizationToken",
         "ecr:UploadLayerPart",
         "ecr:InitiateLayerUpload",
         "ecr:BatchCheckLayerAvailability",
@@ -55,7 +54,12 @@ module "iam_policy" {
         "eks:ListNodegroups"
       ],
       "Effect": "Allow",
-      "Resource": "*"
+      "Resource": "${module.ecr.repository_arn}"
+    },
+    {
+        "Effect": "Allow",
+        "Action": "ecr:GetAuthorizationToken",
+        "Resource": "*"
     }
   ]
 }
