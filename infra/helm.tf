@@ -104,11 +104,11 @@ resource "helm_release" "todoapp" {
   }
   set {
     name = "container.image"
-    value = "ghcr.io/andjela11/docker-nodejs-sample"
+    value = module.ecr.repository_url
   }
   set {
     name = "container.tag"
-    value = "v1.2.4"
+    value = "docker-v1.2.7"
   }
   set {
     name = "service.port"

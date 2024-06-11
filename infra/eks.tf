@@ -7,7 +7,7 @@ module "eks" {
 
   cluster_endpoint_public_access  = true
   #public endpoint
-  cluster_endpoint_public_access_cidrs = ["80.93.252.50/32"]
+  cluster_endpoint_public_access_cidrs = ["0.0.0.0/0"]
   #cluster private endpoint access
   cluster_endpoint_private_access = true
   
@@ -20,6 +20,22 @@ module "eks" {
       service_account_role_arn = module.ebs_csi_irsa_role.iam_role_arn
       addon_version = "v1.30.0-eksbuild.1"
       resolve_conflicts = "PRESERVE"
+    }
+  }
+
+  access_entries = {
+    github = {
+      principal_arn=module.iam_assumable_role_with_oidc.iam_role_arn
+
+      policy_associations = {
+        github = {
+          policy_arn = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSEditPolicy"
+          access_scope = {
+            namespaces = ["vegait-training"]
+            type = "namespace"
+          }
+        }
+      }
     }
   }
 
