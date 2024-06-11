@@ -23,6 +23,22 @@ module "eks" {
     }
   }
 
+  access_entries = {
+    github = {
+      principal_arn=module.iam_assumable_role_with_oidc.iam_role_arn
+
+      policy_associations = {
+        github = {
+          policy_arn = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSEditPolicy"
+          access_scope = {
+            namespaces = ["vegait-training"]
+            type = "namespace"
+          }
+        }
+      }
+    }
+  }
+
   # EKS Managed Node Group(s)
   eks_managed_node_groups = {
     node-group-andjela = {
